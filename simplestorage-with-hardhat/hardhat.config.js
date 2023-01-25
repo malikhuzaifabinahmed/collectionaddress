@@ -2,7 +2,7 @@ require("@nomicfoundation/hardhat-toolbox")
 require("./tasks/blocknumber.js")
 require("hardhat-gas-reporter")
 require("dotenv").config()
-
+require("solidity-coverage")
 const GPrivatekey1 = process.env.Geroli_Private_key
 const Grpcurl = process.env.Geroli_Rpc_Url
 const etherscan_apikey = process.env.etherscan_apikey
@@ -32,5 +32,6 @@ module.exports = {
     currency: "USD",
     coinmarketcap: coincapapikey,
   },
+
   solidity: "0.8.17",
 }

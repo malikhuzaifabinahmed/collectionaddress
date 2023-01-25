@@ -19,4 +19,11 @@ describe("SimpleStorage", function () {
     const currentvalue = await contract.retrieve()
     assert.equal(currentvalue, expectedvalue)
   })
+  it("should store name of the person name and favroutenumber", async () => {
+    const personname = "name"
+    const expectedvalue = "30"
+    await contract.addPerson(personname, expectedvalue)
+    const currentvalue = await contract.nameToFavoriteNumber(personname)
+    assert.equal(currentvalue, expectedvalue)
+  })
 })
