@@ -1,9 +1,11 @@
 require("@nomicfoundation/hardhat-toolbox")
+require("./tasks/blocknumber.js")
 require("dotenv").config()
 
 const GPrivatekey1 = process.env.Geroli_Private_key
 const Grpcurl = process.env.Geroli_Rpc_Url
 const etherscan_apikey = process.env.etherscan_apikey
+
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   networks: {
