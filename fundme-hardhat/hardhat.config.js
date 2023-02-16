@@ -17,6 +17,10 @@ module.exports = {
       chainId: 5,
       blockconfirmations: 6,
     },
+    localhost: {
+      url: "http://127.0.0.1:8545/",
+      blockconfirmations: 6,
+    },
   },
 
   etherscan: {
@@ -33,7 +37,7 @@ module.exports = {
   },
   gasReporter: {
     enabled: true,
-    ouputFile: "gasreport.txt",
+    outputFile: "gasreporter.txt",
     nocolor: true,
     currency: "USD",
     tokken: "Matic",
