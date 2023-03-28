@@ -26,21 +26,14 @@ const getContractMetadata = async (address, provider) => {
 blockverifer = async (blockNumber, currentBlockNumber, provider) => {
   while (true) {
     console.log("blockverifier started");
-    const data = { 
-      collectionaddress :"",
-      blocknumber: blockNumber,
-      isERC721: false
-    }
-   
     let block;
     try {
       block = await provider.getBlockWithTransactions(blockNumber);
     } catch (e) {
       console.log(e);
-      data.blocknumber =blockNumber
-      return data;
+      return blockNumber;
     }
-    data.blocknumber= blockNumber + 1;
+    blockNumber = blockNumber + 1;
     // LOOKS FOR CONTRACT CREATION TRANSACTION IN TRANSACTIONS OF BLOCKCHAIN
     const contracts = block.transactions.filter((tx) => Boolean(tx.creates));
     //looks for each contract creation
@@ -54,17 +47,13 @@ blockverifer = async (blockNumber, currentBlockNumber, provider) => {
           "this is the starting block number for erc721 = ",
           blockNumber
         );
-        data.collectionaddress = address;
-        data.isERC721 = true;
-        return data;
+        return -1;
       }
     }
-
-    console.log(`Now at block = ${blockNumber} also isErc721 = ${data.isERC721}`);
+    console.log(`Now at block = ${blockNumber}`);
     if (currentBlockNumber <= blockNumber) {
-      return "false";
+      return -1;
     }
-    return data;
   }
 };
 async function main() {
@@ -73,24 +62,21 @@ async function main() {
     "https://eth-goerli.g.alchemy.com/v2/gcPnXAkjhalj6B9hURGo-oAcstQ1bHxX"
   );
 
-  let blockNumber = 46264;
+  let blockNumber = 46264
+  ;
   let currentBlockNumber = await provider.getBlockNumber();
   while (true) {
     console.log("i am in first while");
-    let data = await blockverifer(
+    let blocknumber = await blockverifer(
       blockNumber,
       currentBlockNumber,
       provider
     );
-    if(data == "false"){
-      console.log("ended");
-    }
-    blockNumber = data.blocknumber;
+    blockNumber = blocknumber;
 
-    console.log(`blocknumber after error ${data.blocknumber}`);
-    if (data.isERC721 == true) {
-      let dataarray =  Object.entries(data);
-      fs.appendFileSync("./contractaddress.csv", dataarray.join(',') + '\n')
+    console.log(`blocknumber after error ${blocknumber}`);
+    if (blocknumber === -1) {
+      break;
     }
   }
 }
