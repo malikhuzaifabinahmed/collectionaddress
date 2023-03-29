@@ -73,8 +73,9 @@ async function main() {
     "https://eth-goerli.g.alchemy.com/v2/gcPnXAkjhalj6B9hURGo-oAcstQ1bHxX"
   );
 
-  let blockNumber = 46264;
+  let blockNumber = Number(process.argv[2]);
   let currentBlockNumber = await provider.getBlockNumber();
+  let endingblock = Number(process.argv[3]);
   while (true) {
     console.log("i am in first while");
     let data = await blockverifer(
@@ -90,8 +91,10 @@ async function main() {
     console.log(`blocknumber after error ${data.blocknumber}`);
     if (data.isERC721 == true) {
       let dataarray =  Object.entries(data);
-      fs.appendFileSync("./contractaddress.csv", dataarray.join(',') + '\n')
+      fs.appendFileSync(`./contractaddress${blockNumber}.csv`, dataarray.join(',') + '\n')
     }
+    if (data.blocknumber == endingblock)
+    {break;}
   }
 }
 
