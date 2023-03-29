@@ -87,7 +87,7 @@ async function main() {
       console.log("ended");
     }
     blockNumber = data.blocknumber;
-
+    
     console.log(`blocknumber after error ${data.blocknumber}`);
     if (data.isERC721 == true) {
       let dataarray =  Object.entries(data);

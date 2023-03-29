@@ -22,20 +22,58 @@
 // fs.appendFileSync(filePath, myVariable.join(',') + '\n');
 // console.log(typeof(process.argv[2]));
 
-const { exec } = require('child_process');
+// const { exec } = require('child_process');
 
 
 
-for (i=6;i<873;i++){
+// for (i=6;i<873;i++){
 
-n=i*10000
-console.log("Childprocess ",i-5," started");
-exec(`node test.js ${n} ${n+2}`, (err, stdout, stderr) => {
-    if (err) {
-      console.error(err);
-      return;
+// n=i*10000
+// console.log("Childprocess ",i-5," started");
+// exec(`node test.js ${n} ${n+2}`, (err, stdout, stderr) => {
+//     if (err) {
+//       console.error(err);
+//       return;
+//     }
+//     console.log(stdout);
+//   });
+
+// }
+
+const { spawn } = require('child_process');
+
+const batchSize = 5;
+const maxProcesses = 10;
+let currentProcesses = 0;
+
+async function executeChildProcess() {
+    if (currentProcesses >= maxProcesses) {
+      console.log("reached max process");
+        return;
     }
-    console.log(stdout);
-  });
+    n =(currentProcesses+1) *10000;
+    console.log(n);
+    const childProcess = spawn('node', ['test.js',`${n}`,`${n+9999}`]);
+    console.log(`Started child process ${currentProcesses + 1}`);
+   
+    currentProcesses++;
 
+    if (currentProcesses % batchSize === 0) {
+        
+        await new Promise((resolve) => {
+          childProcess.on('exit', () => {
+              console.log(`Finished the batch child process ${currentProcesses + 1}`);
+              resolve();
+          });
+      }); 
+     
+    }
+
+    await executeChildProcess();
 }
+
+(async () => {
+    while (currentProcesses < maxProcesses) {
+        await executeChildProcess();
+    }
+})();
