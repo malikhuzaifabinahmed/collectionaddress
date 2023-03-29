@@ -42,9 +42,9 @@
 
 const { spawn } = require('child_process');
 
-const batchSize = 5;
-const maxProcesses = 10;
-let currentProcesses = 0;
+const batchSize = 50;
+const maxProcesses = 873;
+let currentProcesses = 4;
 
 async function executeChildProcess() {
     if (currentProcesses >= maxProcesses) {
